@@ -1,17 +1,17 @@
 version: "3"
 services:
-  postgres:
+  auth_psql:
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - "${AUTH_PSQL_PORT}:${AUTH_PSQL_PORT}"
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=master123
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${AUTH_PSQL_USER}
+      - POSTGRES_PASSWORD=${AUTH_PSQL_PASSWORD}
+      - POSTGRES_DB=${AUTH_PSQL_DB}
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
-      - backend
+      - microservices
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -21,7 +21,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     networks:
-      - backend
+      - microservices
 
 volumes:
   pg_data:
@@ -30,5 +30,5 @@ volumes:
     driver: local
 
 networks:
-  backend:
+  microservices:
     driver: bridge
